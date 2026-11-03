@@ -47,7 +47,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@200;300;400;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@200;300;400;500;600;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     /* ========================================
@@ -643,62 +643,385 @@
     }
 
     /* ========================================
-       SERVICES (BENTO GRID)
+       SERVICES (ACCORDION OF SHIPPED WORK)
        ======================================== */
     .services {
       padding: var(--section-pad) 0;
-    }
-    .services__header {
-      margin-bottom: 64px;
-      max-width: 600px;
-    }
-    .services__grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    .service-card {
       position: relative;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 40px 36px;
-      overflow: hidden;
-      transition: border-color 0.4s var(--ease);
-      cursor: default;
     }
-    .service-card:hover { border-color: var(--border-hover); }
-    .service-card--wide { grid-column: span 2; }
+    .services__header--center {
+      text-align: center;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .services__eyebrow {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+    }
+    .services__title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5.2vw, 76px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .services__title em {
+      font-style: normal;
+      color: var(--lemon);
+    }
+    .services__sub {
+      font-size: clamp(16px, 1.6vw, 18px);
+      line-height: 1.6;
+      color: var(--text-dim);
+      max-width: 52ch;
+      margin: 0 auto;
+    }
+    .services__divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      margin-top: clamp(80px, 9vw, 120px);
+    }
 
-    /* Cursor-following glow */
-    .service-card::before {
+    /* Accordion Container & Rows */
+    .accordion {
+      width: 100%;
+    }
+    .accordion__row {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      scroll-margin-top: 90px;
+    }
+    .accordion__heading {
+      margin: 0;
+      padding: 0;
+      font-size: inherit;
+      font-weight: inherit;
+    }
+    .accordion__trigger {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding: clamp(32px, 3.5vw, 40px) 0;
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      color: var(--text);
+      transition: color 400ms var(--ease);
+    }
+    .accordion__trigger:focus-visible {
+      outline: 2px solid var(--lemon);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    .accordion__num {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 14px;
+      color: var(--text-dimmer);
+      transition: color 400ms var(--ease);
+      user-select: none;
+    }
+    .accordion__title {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: clamp(24px, 2.6vw, 40px);
+      letter-spacing: -0.03em;
+      color: var(--text);
+      transition: transform 400ms var(--ease), color 400ms var(--ease);
+      will-change: transform;
+    }
+    .accordion__trigger:hover .accordion__title {
+      transform: translateX(8px);
+      color: var(--lemon);
+    }
+    .accordion__trigger:hover .accordion__num {
+      color: var(--lavender);
+    }
+    .accordion__row.is-open .accordion__title {
+      color: var(--lemon);
+    }
+    .accordion__icon {
+      position: relative;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      transition: color 400ms var(--ease);
+    }
+    .accordion__icon-line {
+      position: absolute;
+      background: currentColor;
+      border-radius: 1px;
+    }
+    .accordion__icon-line--h {
+      width: 16px;
+      height: 1.5px;
+    }
+    .accordion__icon-line--v {
+      width: 1.5px;
+      height: 16px;
+      transition: transform 400ms var(--ease), opacity 400ms var(--ease);
+    }
+    .accordion__row.is-open .accordion__icon {
+      color: var(--lemon);
+    }
+    .accordion__row.is-open .accordion__icon-line--v {
+      transform: rotate(90deg);
+      opacity: 0;
+    }
+
+    /* Accordion Expanded Panel */
+    .accordion__panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 600ms var(--ease);
+    }
+    .accordion__row.is-open .accordion__panel {
+      grid-template-rows: 1fr;
+    }
+    .accordion__panel-inner {
+      overflow: hidden;
+    }
+    .accordion__panel-content {
+      display: grid;
+      grid-template-columns: 42% 54%;
+      gap: 4%;
+      align-items: start;
+      padding-left: 72px; /* aligns under title, offset from number */
+      padding-bottom: 48px;
+      padding-top: 4px;
+    }
+
+    /* Left Column */
+    .accordion__col-left {
+      display: flex;
+      flex-direction: column;
+    }
+    .accordion__lead {
+      font-size: clamp(19px, 2vw, 22px);
+      line-height: 1.5;
+      color: #f5f5f0;
+      max-width: 34ch;
+      margin-bottom: 28px;
+    }
+    .accordion__work-box {
+      margin-bottom: 24px;
+    }
+    .accordion__work-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .accordion__case-study {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-dim);
+      max-width: 42ch;
+    }
+    .accordion__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--lemon);
+      position: relative;
+      margin-top: 8px;
+      padding-bottom: 4px;
+      width: fit-content;
+    }
+    .accordion__link::after {
       content: '';
       position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(500px circle at var(--glow-x, 50%) var(--glow-y, 50%),
-        rgba(166,107,255,.12), transparent 40%);
-      opacity: var(--glow-opacity, 0);
-      transition: opacity 0.4s var(--ease);
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--lemon);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 350ms var(--ease);
+    }
+    .accordion__link:hover::after {
+      transform: scaleX(1);
+    }
+    .accordion__link-arrow {
+      transition: transform 300ms var(--ease);
+    }
+    .accordion__link:hover .accordion__link-arrow {
+      transform: translateX(6px);
+    }
+    .accordion__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .accordion__tag {
+      font-size: 12px;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 4px 12px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      letter-spacing: -0.01em;
+    }
+
+    /* Right Column (Preview Image) */
+    .accordion__col-right {
+      position: relative;
+      width: 100%;
+    }
+    .accordion__preview-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #2a2a2a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .accordion__preview-glow {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(166, 107, 255, 0.28) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
-    .service-card > * { position: relative; z-index: 1; }
+    .accordion__preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: translateY(var(--parallax-y, 0px));
+      transition: transform 120ms ease-out;
+      will-change: transform;
+      position: relative;
+      z-index: 1;
+    }
+    .accordion__preview-img--contain {
+      object-fit: contain;
+      width: 82%;
+      height: 82%;
+    }
+    .accordion__preview-mockup {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateY(var(--parallax-y, 0px));
+      transition: transform 120ms ease-out;
+      will-change: transform;
+      position: relative;
+      z-index: 1;
+    }
 
-    .service-card__icon {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 24px;
-      color: var(--lavender);
+    /* Panel Staggered Transitions */
+    .accordion__lead,
+    .accordion__work-box,
+    .accordion__link,
+    .accordion__tags {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 500ms var(--ease), transform 500ms var(--ease);
     }
-    .service-card h3 {
-      margin-bottom: 12px;
-      font-size: clamp(18px, 2vw, 24px);
+    .accordion__preview-frame {
+      opacity: 0;
+      transform: scale(1.04);
+      transition: opacity 600ms var(--ease), transform 600ms var(--ease);
     }
-    .service-card p {
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--text-dim);
+    .accordion__row.is-open .accordion__lead {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 80ms;
+    }
+    .accordion__row.is-open .accordion__work-box {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 150ms;
+    }
+    .accordion__row.is-open .accordion__link {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 220ms;
+    }
+    .accordion__row.is-open .accordion__tags {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 290ms;
+    }
+    .accordion__row.is-open .accordion__preview-frame {
+      opacity: 1;
+      transform: scale(1);
+      transition-delay: 120ms;
+    }
+
+    /* Mobile Accordion */
+    @media (max-width: 768px) {
+      .accordion__trigger {
+        grid-template-columns: 36px 1fr auto;
+        gap: 16px;
+        padding: 24px 0;
+      }
+      .accordion__panel-content {
+        display: flex;
+        flex-direction: column;
+        padding-left: 0;
+        padding-bottom: 36px;
+        gap: 24px;
+      }
+      /* Order: image, lead, real work, link, tags */
+      .accordion__col-right {
+        order: 1;
+      }
+      .accordion__col-left {
+        order: 2;
+      }
+      .accordion__lead {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .accordion__panel {
+        transition: none !important;
+      }
+      .accordion__lead,
+      .accordion__work-box,
+      .accordion__link,
+      .accordion__tags,
+      .accordion__preview-frame,
+      .accordion__preview-img,
+      .accordion__preview-mockup,
+      .accordion__title,
+      .accordion__icon-line--v {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
     }
 
     /* ========================================
@@ -1589,92 +1912,19 @@
       </div>
     </section>
 
-    <!-- SERVICES -->
+    <!-- ========================================
+         SERVICES: ACCORDION OF SHIPPED WORK
+         ======================================== -->
     <section class="services" id="services">
       <div class="container">
-        <div class="services__header reveal">
-          <span class="label">Services</span>
-          <h2>We build the hard stuff.</h2>
-          <p style="margin-top:16px">Complex systems that require deep engineering. Not marketing sites with a blog.</p>
+        <div class="services__header services__header--center reveal">
+          <span class="services__eyebrow">WHAT WE BUILD</span>
+          <h2 class="services__title">One team, from <em>design to deployment</em></h2>
+          <p class="services__sub">No handoffs between a design agency and a dev shop. Every service below has a real, shipped product behind it.</p>
         </div>
-        <div class="services__grid">
-          <!-- Card 1: Web Platforms (wide) -->
-          <div class="service-card service-card--wide reveal">
-            <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="8" width="40" height="32" rx="4"/>
-              <line x1="4" y1="18" x2="44" y2="18"/>
-              <circle cx="11" cy="13" r="2"/>
-              <circle cx="18" cy="13" r="2"/>
-            </svg>
-            <h3>Web Platforms</h3>
-            <p>Production-grade web applications built for scale. Complex dashboards, customer-facing platforms, real-time interfaces. Engineered for performance and reliability.</p>
-          </div>
-          <!-- Card 2: Mobile Apps -->
-          <div class="service-card reveal">
-            <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="12" y="4" width="24" height="40" rx="4"/>
-              <line x1="20" y1="38" x2="28" y2="38"/>
-            </svg>
-            <h3>Mobile Apps</h3>
-            <p>Native and cross-platform apps for iOS and Android. Clean architecture, smooth animations, offline-first when it matters.</p>
-          </div>
-          <!-- Card 3: Algo Trading Systems -->
-          <div class="service-card reveal">
-            <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="8" y1="36" x2="8" y2="20"/>
-              <line x1="8" y1="28" x2="8" y2="28" stroke-width="6"/>
-              <line x1="18" y1="40" x2="18" y2="14"/>
-              <line x1="18" y1="26" x2="18" y2="26" stroke-width="6"/>
-              <line x1="28" y1="34" x2="28" y2="10"/>
-              <line x1="28" y1="20" x2="28" y2="20" stroke-width="6"/>
-              <line x1="38" y1="38" x2="38" y2="8"/>
-              <line x1="38" y1="22" x2="38" y2="22" stroke-width="6"/>
-              <rect x="5" y="24" width="6" height="8" rx="1" fill="currentColor" stroke="none"/>
-              <rect x="15" y="18" width="6" height="12" rx="1" fill="currentColor" stroke="none"/>
-              <rect x="25" y="14" width="6" height="10" rx="1" fill="currentColor" stroke="none"/>
-              <rect x="35" y="16" width="6" height="14" rx="1" fill="currentColor" stroke="none"/>
-            </svg>
-            <h3>Algo Trading Systems</h3>
-            <p>Low-latency execution engines, real-time analytics dashboards, and trading infrastructure. Built for firms where milliseconds are money.</p>
-          </div>
-          <!-- Card 4: Excel & Data Decoders (wide) -->
-          <div class="service-card service-card--wide reveal">
-            <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="6" width="40" height="36" rx="3"/>
-              <line x1="4" y1="16" x2="44" y2="16"/>
-              <line x1="4" y1="26" x2="44" y2="26"/>
-              <line x1="4" y1="36" x2="44" y2="36"/>
-              <line x1="18" y1="6" x2="18" y2="42"/>
-              <line x1="32" y1="6" x2="32" y2="42"/>
-            </svg>
-            <h3>Excel &amp; Data Decoders</h3>
-            <p>Legacy spreadsheet workflows decoded and rebuilt as automated systems. We reverse-engineer the logic your business runs on, then ship something that actually scales and doesn't break when someone edits row 47.</p>
-          </div>
-          <!-- Card 5: Custom Software & SaaS -->
-          <div class="service-card reveal">
-            <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="16,14 6,24 16,34"/>
-              <polyline points="32,14 42,24 32,34"/>
-              <line x1="28" y1="8" x2="20" y2="40"/>
-            </svg>
-            <h3>Custom Software &amp; SaaS</h3>
-            <p>Internal tools, SaaS platforms, and bespoke systems designed around your workflow. No off-the-shelf compromises.</p>
-          </div>
-          <!-- Card 6: AI & Automation -->
-          <div class="service-card reveal">
-            <svg class="service-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="24" cy="24" r="18"/>
-              <circle cx="24" cy="24" r="6"/>
-              <line x1="24" y1="6" x2="24" y2="14"/>
-              <line x1="24" y1="34" x2="24" y2="42"/>
-              <line x1="6" y1="24" x2="14" y2="24"/>
-              <line x1="34" y1="24" x2="42" y2="24"/>
-              <line x1="11.3" y1="11.3" x2="16.9" y2="16.9"/>
-              <line x1="31.1" y1="31.1" x2="36.7" y2="36.7"/>
-            </svg>
-            <h3>AI &amp; Automation</h3>
-            <p>ML pipelines, intelligent automation, and AI-powered features integrated into your existing stack. Practical AI, not science projects.</p>
-          </div>
+        <div class="services__divider" aria-hidden="true"></div>
+        <div class="accordion" id="servicesAccordion">
+          <!-- Accordion rows dynamically rendered from SERVICES data array -->
         </div>
       </div>
     </section>
@@ -2102,6 +2352,78 @@
       const supportsHover = window.matchMedia('(hover: hover)').matches;
 
       /* -------------------------------------------
+         SERVICES DATA: ACCORDION OF SHIPPED WORK
+         ------------------------------------------- */
+      const SERVICES = [
+        {
+          num: "01",
+          title: "Web Platforms",
+          lead: "Sites and platforms that feel like film and carry real revenue.",
+          caseStudy: "Architected Meridian's institutional portal alongside a high-converting flagship marketing site, handling $42M+ in daily transaction volume with sub-100ms response times.",
+          project: "Meridian Capital",
+          linkText: "Explore Meridian",
+          linkUrl: "#work",
+          tags: ["React / Next.js", "TypeScript", "Performance"],
+          previewImg: "assets/work-01.webp"
+        },
+        {
+          num: "02",
+          title: "Mobile Apps",
+          lead: "Native iOS and Android, shipped to the store and loved on day one.",
+          caseStudy: "Built the consumer investing and portfolio app for Stackline from first sketch to App Store feature. Reached 2.1M monthly active users in 14 weeks with 99.98% crash-free sessions across 180+ device profiles.",
+          project: "Stackline Mobile",
+          linkText: "Explore Stackline",
+          linkUrl: "#work",
+          tags: ["Swift / Kotlin", "Offline-First", "Fluid Haptics"],
+          previewImg: "assets/work-02.webp"
+        },
+        {
+          num: "03",
+          title: "Algo Trading Systems",
+          lead: "Execution engines, backtesters and risk controls built for speed.",
+          caseStudy: "Executed a mission-critical Python-to-Rust core rewrite for proprietary market makers. Slashed order-to-exchange latency to 40ms flat while processing 1.4M ticks/sec under extreme peak volatility.",
+          project: "Kestrel Execution Engine",
+          linkText: "Explore Kestrel",
+          linkUrl: "#work",
+          tags: ["Rust", "Zero-Alloc", "WebSocket FIX"],
+          previewImg: "assets/work-03.webp"
+        },
+        {
+          num: "04",
+          title: "Excel & Data Decoders",
+          lead: "Turn messy spreadsheets and legacy files into clean pipelines.",
+          caseStudy: "Engineered an automated ingestion parser supporting 300+ disparate institutional broker statement formats. Reduced morning reconciliation runs from 12 grueling hours to 3 automated minutes.",
+          project: "Lumina Data Pipeline",
+          linkText: "Explore Lumina",
+          linkUrl: "#work",
+          tags: ["Data Pipelines", "Schema Synthesis", "Automation"],
+          previewImg: "assets/work-04.webp"
+        },
+        {
+          num: "05",
+          title: "Custom Software & SaaS",
+          lead: "Internal tools and SaaS platforms, designed and built end to end.",
+          caseStudy: "Designed and engineered an enterprise workflow platform from initial design system sprint to fully deployed SOC-2 compliant multi-tenant SaaS, replacing 5 legacy disparate subscriptions.",
+          project: "OmniFlow Enterprise",
+          linkText: "Explore OmniFlow",
+          linkUrl: "#work",
+          tags: ["Distributed Systems", "Multi-Tenant", "GraphQL"],
+          previewImg: "assets/keyboard.png"
+        },
+        {
+          num: "06",
+          title: "AI Agents & Automation",
+          lead: "Practical AI wired into your workflows: agents, copilots, document intelligence.",
+          caseStudy: "Constructed private autonomous research copilots connected directly to internal firm repositories. Reduced equity analyst pre-market briefing preparation time from 90 minutes to under 12 minutes.",
+          project: "Aegis Analyst Agent",
+          linkText: "Explore Aegis",
+          linkUrl: "#work",
+          tags: ["LLM Agents", "Vector Embeddings", "Deterministic Fallbacks"],
+          previewImg: "assets/work-06.webp"
+        }
+      ];
+
+      /* -------------------------------------------
          NAV: scroll adapt + mobile menu
          ------------------------------------------- */
       function initNav() {
@@ -2269,23 +2591,412 @@
       }
 
       /* -------------------------------------------
-         SERVICE CARDS: cursor-following glow
+         SERVICES ACCORDION (Render, Toggle & Parallax)
          ------------------------------------------- */
-      function initServiceCards() {
-        if (!supportsHover) return;
+      function getMockupSvg(num) {
+        if (num === '01') {
+          return `<svg viewBox="0 0 800 500" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="500" fill="#171717"/>
+            <rect width="800" height="42" fill="#1f1f1f"/>
+            <circle cx="24" cy="21" r="5" fill="rgba(255,255,255,0.2)"/>
+            <circle cx="42" cy="21" r="5" fill="rgba(255,255,255,0.2)"/>
+            <circle cx="60" cy="21" r="5" fill="rgba(255,255,255,0.2)"/>
+            <rect x="90" y="10" width="360" height="22" rx="11" fill="#141414"/>
+            <text x="110" y="25" fill="rgba(255,255,255,0.35)" font-family="ui-monospace, monospace" font-size="11">https://meridian.capital/portal</text>
+            <line x1="0" y1="42" x2="800" y2="42" stroke="rgba(255,255,255,0.08)"/>
+            <rect x="50" y="66" width="90" height="18" rx="4" fill="#FFF21A"/>
+            <rect x="480" y="70" width="48" height="10" rx="3" fill="rgba(255,255,255,0.25)"/>
+            <rect x="546" y="70" width="56" height="10" rx="3" fill="rgba(255,255,255,0.25)"/>
+            <rect x="620" y="70" width="44" height="10" rx="3" fill="rgba(255,255,255,0.25)"/>
+            <rect x="682" y="62" width="68" height="26" rx="13" fill="#A66BFF"/>
+            <rect x="50" y="126" width="380" height="34" rx="4" fill="#f5f5f0"/>
+            <rect x="50" y="170" width="280" height="34" rx="4" fill="#f5f5f0"/>
+            <rect x="50" y="222" width="420" height="12" rx="3" fill="rgba(255,255,255,0.35)"/>
+            <rect x="50" y="242" width="340" height="12" rx="3" fill="rgba(255,255,255,0.25)"/>
+            <rect x="50" y="278" width="130" height="38" rx="19" fill="#FFF21A"/>
+            <rect x="196" y="278" width="110" height="38" rx="19" stroke="rgba(255,255,255,0.25)" fill="none"/>
+            <rect x="50" y="348" width="220" height="114" rx="12" fill="#1f1f1f" stroke="rgba(255,255,255,0.08)"/>
+            <circle cx="80" cy="382" r="12" fill="rgba(166,107,255,0.2)"/>
+            <rect x="74" y="412" width="110" height="10" rx="2" fill="#f5f5f0"/>
+            <rect x="74" y="430" width="70" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+            <rect x="290" y="348" width="220" height="114" rx="12" fill="#1f1f1f" stroke="rgba(255,255,255,0.08)"/>
+            <circle cx="320" cy="382" r="12" fill="rgba(255,242,26,0.2)"/>
+            <rect x="314" y="412" width="100" height="10" rx="2" fill="#f5f5f0"/>
+            <rect x="314" y="430" width="60" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+            <rect x="530" y="348" width="220" height="114" rx="12" fill="#1f1f1f" stroke="rgba(255,255,255,0.08)"/>
+            <circle cx="560" cy="382" r="12" fill="rgba(166,107,255,0.2)"/>
+            <rect x="554" y="412" width="120" height="10" rx="2" fill="#f5f5f0"/>
+            <rect x="554" y="430" width="80" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+            <rect x="510" y="130" width="240" height="180" rx="16" fill="#1f1f1f" stroke="rgba(166,107,255,0.3)"/>
+            <path d="M 530 260 Q 590 180 650 230 T 730 160" stroke="#FFF21A" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>`;
+        } else if (num === '02') {
+          return `<svg viewBox="0 0 800 500" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="500" fill="#171717"/>
+            <g transform="translate(190, 40)">
+              <rect width="190" height="410" rx="34" fill="#1b1b1b" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+              <rect x="68" y="14" width="54" height="14" rx="7" fill="#0c0c0c"/>
+              <text x="24" y="60" fill="rgba(255,255,255,0.4)" font-family="Inter, sans-serif" font-size="10" font-weight="600" letter-spacing="1">PORTFOLIO</text>
+              <text x="24" y="86" fill="#f5f5f0" font-family="'Inter Tight', sans-serif" font-size="22" font-weight="700">$128,420</text>
+              <rect x="24" y="98" width="60" height="16" rx="8" fill="rgba(255,242,26,0.15)"/>
+              <text x="32" y="110" fill="#FFF21A" font-family="'Inter Tight', sans-serif" font-size="9" font-weight="600">+14.8% YTD</text>
+              <path d="M 24 180 C 60 160, 90 200, 120 140 C 145 100, 160 120, 166 110" stroke="#A66BFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <rect x="18" y="230" width="154" height="48" rx="12" fill="#242424" stroke="rgba(255,255,255,0.06)"/>
+              <circle cx="38" cy="254" r="10" fill="#FFF21A"/>
+              <rect x="56" y="246" width="50" height="8" rx="2" fill="#f5f5f0"/>
+              <rect x="56" y="258" width="30" height="6" rx="2" fill="rgba(255,255,255,0.3)"/>
+              <rect x="126" y="250" width="34" height="8" rx="2" fill="#f5f5f0"/>
+              <rect x="18" y="286" width="154" height="48" rx="12" fill="#242424" stroke="rgba(255,255,255,0.06)"/>
+              <circle cx="38" cy="310" r="10" fill="#A66BFF"/>
+              <rect x="56" y="302" width="45" height="8" rx="2" fill="#f5f5f0"/>
+              <rect x="56" y="314" width="28" height="6" rx="2" fill="rgba(255,255,255,0.3)"/>
+              <rect x="126" y="306" width="34" height="8" rx="2" fill="#f5f5f0"/>
+              <rect x="18" y="350" width="154" height="38" rx="19" fill="#141414"/>
+              <circle cx="56" cy="369" r="4" fill="#FFF21A"/>
+              <circle cx="95" cy="369" r="4" fill="rgba(255,255,255,0.3)"/>
+              <circle cx="134" cy="369" r="4" fill="rgba(255,255,255,0.3)"/>
+            </g>
+            <g transform="translate(420, 60)">
+              <rect width="190" height="410" rx="34" fill="#1b1b1b" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+              <rect x="68" y="14" width="54" height="14" rx="7" fill="#0c0c0c"/>
+              <circle cx="95" cy="110" r="32" fill="rgba(255,242,26,0.12)"/>
+              <path d="M 85 110 L 92 117 L 106 103" stroke="#FFF21A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="95" y="165" text-anchor="middle" fill="#f5f5f0" font-family="'Inter Tight', sans-serif" font-size="16" font-weight="700">Order Executed</text>
+              <text x="95" y="184" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="Inter, sans-serif" font-size="10">250.00 AAPL @ $224.15</text>
+              <rect x="24" y="215" width="142" height="74" rx="12" fill="#242424" stroke="rgba(255,255,255,0.06)"/>
+              <text x="36" y="240" fill="rgba(255,255,255,0.4)" font-family="Inter, sans-serif" font-size="9">Total Settlement</text>
+              <text x="36" y="260" fill="#f5f5f0" font-family="'Inter Tight', sans-serif" font-size="14" font-weight="600">$56,037.50</text>
+              <rect x="24" y="310" width="142" height="40" rx="20" fill="#FFF21A"/>
+              <text x="95" y="335" text-anchor="middle" fill="#171717" font-family="Inter, sans-serif" font-size="11" font-weight="700">Done</text>
+            </g>
+          </svg>`;
+        } else if (num === '03') {
+          return `<svg viewBox="0 0 800 500" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="500" fill="#171717"/>
+            <rect width="800" height="44" fill="#1a1a1a"/>
+            <text x="28" y="27" fill="#f5f5f0" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">BTC-USD</text>
+            <text x="105" y="27" fill="#FFF21A" font-family="'JetBrains Mono', monospace" font-size="13">$68,410.20</text>
+            <rect x="200" y="14" width="76" height="18" rx="4" fill="rgba(166,107,255,0.2)"/>
+            <text x="210" y="27" fill="#A66BFF" font-family="'JetBrains Mono', monospace" font-size="10">LATENCY 40ms</text>
+            <line x1="0" y1="44" x2="800" y2="44" stroke="rgba(255,255,255,0.08)"/>
+            <g opacity="0.15">
+              <line x1="40" y1="120" x2="520" y2="120" stroke="#fff" stroke-dasharray="3 3"/>
+              <line x1="40" y1="200" x2="520" y2="200" stroke="#fff" stroke-dasharray="3 3"/>
+              <line x1="40" y1="280" x2="520" y2="280" stroke="#fff" stroke-dasharray="3 3"/>
+            </g>
+            <line x1="70" y1="260" x2="70" y2="320" stroke="#A66BFF" stroke-width="1.5"/>
+            <rect x="64" y="275" width="12" height="30" fill="#A66BFF"/>
+            <line x1="120" y1="240" x2="120" y2="290" stroke="#FFF21A" stroke-width="1.5"/>
+            <rect x="114" y="250" width="12" height="25" fill="#FFF21A"/>
+            <line x1="170" y1="210" x2="170" y2="280" stroke="#FFF21A" stroke-width="1.5"/>
+            <rect x="164" y="225" width="12" height="35" fill="#FFF21A"/>
+            <line x1="220" y1="220" x2="220" y2="270" stroke="#A66BFF" stroke-width="1.5"/>
+            <rect x="214" y="235" width="12" height="20" fill="#A66BFF"/>
+            <line x1="270" y1="180" x2="270" y2="250" stroke="#FFF21A" stroke-width="1.5"/>
+            <rect x="264" y="195" width="12" height="40" fill="#FFF21A"/>
+            <line x1="320" y1="150" x2="320" y2="220" stroke="#FFF21A" stroke-width="1.5"/>
+            <rect x="314" y="165" width="12" height="35" fill="#FFF21A"/>
+            <line x1="370" y1="170" x2="370" y2="230" stroke="#A66BFF" stroke-width="1.5"/>
+            <rect x="364" y="180" width="12" height="30" fill="#A66BFF"/>
+            <line x1="420" y1="130" x2="420" y2="190" stroke="#FFF21A" stroke-width="1.5"/>
+            <rect x="414" y="145" width="12" height="32" fill="#FFF21A"/>
+            <line x1="470" y1="90" x2="470" y2="150" stroke="#FFF21A" stroke-width="1.5"/>
+            <rect x="464" y="105" width="12" height="36" fill="#FFF21A"/>
+            <path d="M 60 300 Q 180 240, 270 190 T 500 95" stroke="#A66BFF" stroke-width="2.5" fill="none"/>
+            <line x1="540" y1="44" x2="540" y2="500" stroke="rgba(255,255,255,0.08)"/>
+            <rect x="540" y="44" width="260" height="456" fill="#1a1a1a"/>
+            <text x="560" y="74" fill="rgba(255,255,255,0.4)" font-family="'JetBrains Mono', monospace" font-size="10">ORDER BOOK</text>
+            <rect x="560" y="94" width="220" height="14" fill="rgba(166,107,255,0.1)"/>
+            <text x="564" y="105" fill="#A66BFF" font-family="'JetBrains Mono', monospace" font-size="10">68,432.50   1.428</text>
+            <rect x="560" y="114" width="180" height="14" fill="rgba(166,107,255,0.1)"/>
+            <text x="564" y="125" fill="#A66BFF" font-family="'JetBrains Mono', monospace" font-size="10">68,428.10   2.910</text>
+            <line x1="560" y1="148" x2="780" y2="148" stroke="rgba(255,255,255,0.15)"/>
+            <text x="670" y="160" text-anchor="middle" fill="#FFF21A" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">SPREAD 0.10</text>
+            <line x1="560" y1="172" x2="780" y2="172" stroke="rgba(255,255,255,0.15)"/>
+            <rect x="560" y="186" width="200" height="14" fill="rgba(255,242,26,0.1)"/>
+            <text x="564" y="197" fill="#FFF21A" font-family="'JetBrains Mono', monospace" font-size="10">68,419.90   3.120</text>
+            <rect x="560" y="206" width="160" height="14" fill="rgba(255,242,26,0.1)"/>
+            <text x="564" y="217" fill="#FFF21A" font-family="'JetBrains Mono', monospace" font-size="10">68,415.00   1.884</text>
+          </svg>`;
+        } else if (num === '04') {
+          return `<svg viewBox="0 0 800 500" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="500" fill="#171717"/>
+            <g transform="translate(40, 60)">
+              <rect width="320" height="380" rx="12" fill="#1a1a1a" stroke="rgba(255,255,255,0.1)"/>
+              <rect width="320" height="32" rx="12 12 0 0" fill="#202b20"/>
+              <text x="16" y="21" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="11">broker_raw_v14_final.xlsx</text>
+              <rect x="16" y="48" width="288" height="20" fill="#252525"/>
+              <text x="24" y="62" fill="rgba(255,255,255,0.4)" font-family="'JetBrains Mono', monospace" font-size="9">A       B           C        D</text>
+              <line x1="16" y1="92" x2="304" y2="92" stroke="rgba(255,255,255,0.06)"/>
+              <text x="24" y="86" fill="rgba(255,255,255,0.6)" font-family="'JetBrains Mono', monospace" font-size="9">1042   US_EQ_MKT   #ERR!    42.1</text>
+              <line x1="16" y1="122" x2="304" y2="122" stroke="rgba(255,255,255,0.06)"/>
+              <text x="24" y="116" fill="rgba(255,255,255,0.6)" font-family="'JetBrains Mono', monospace" font-size="9">1043   FIX_SWAP    NULL     88.4</text>
+              <line x1="16" y1="152" x2="304" y2="152" stroke="rgba(255,255,255,0.06)"/>
+              <text x="24" y="146" fill="rgba(255,255,255,0.6)" font-family="'JetBrains Mono', monospace" font-size="9">1044   COMMODITY   NaN      19.2</text>
+              <rect x="16" y="240" width="288" height="90" rx="8" fill="rgba(239,68,68,0.1)" stroke="rgba(239,68,68,0.2)"/>
+              <text x="32" y="270" fill="#f87171" font-family="'JetBrains Mono', monospace" font-size="10">Legacy Processing: 12h 45m</text>
+              <text x="32" y="292" fill="rgba(255,255,255,0.4)" font-family="Inter, sans-serif" font-size="10">Manual VLOOKUP &amp; Macro repairs</text>
+            </g>
+            <g transform="translate(376, 220)">
+              <circle cx="24" cy="24" r="24" fill="#A66BFF"/>
+              <path d="M 16 24 L 32 24 M 26 18 L 32 24 L 26 30" stroke="#171717" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <g transform="translate(440, 60)">
+              <rect width="320" height="380" rx="12" fill="#1f1f1f" stroke="rgba(255,242,26,0.3)"/>
+              <rect width="320" height="32" rx="12 12 0 0" fill="#262626"/>
+              <circle cx="20" cy="16" r="4" fill="#FFF21A"/>
+              <text x="32" y="20" fill="#f5f5f0" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600">pipeline.lumina.live</text>
+              <rect x="230" y="8" width="76" height="16" rx="8" fill="rgba(255,242,26,0.2)"/>
+              <text x="240" y="20" fill="#FFF21A" font-family="'JetBrains Mono', monospace" font-size="9">SYNCHRONIZED</text>
+              <rect x="20" y="52" width="280" height="80" rx="10" fill="#171717" stroke="rgba(255,255,255,0.06)"/>
+              <text x="36" y="80" fill="rgba(255,255,255,0.4)" font-family="Inter, sans-serif" font-size="10">Automated Pipeline Run</text>
+              <text x="36" y="112" fill="#FFF21A" font-family="'Inter Tight', sans-serif" font-size="28" font-weight="700">3m 12s</text>
+              <text x="145" y="112" fill="rgba(255,255,255,0.4)" font-family="'Inter Tight', sans-serif" font-size="13">vs 12 hours</text>
+              <rect x="20" y="148" width="280" height="54" rx="8" fill="#171717" stroke="rgba(255,255,255,0.06)"/>
+              <circle cx="42" cy="175" r="8" fill="rgba(166,107,255,0.2)"/>
+              <text x="60" y="172" fill="#f5f5f0" font-family="'JetBrains Mono', monospace" font-size="10">340 broker files parsed</text>
+              <text x="60" y="188" fill="rgba(255,255,255,0.35)" font-family="Inter, sans-serif" font-size="9">0 discrepancy errors detected</text>
+              <rect x="20" y="214" width="280" height="54" rx="8" fill="#171717" stroke="rgba(255,255,255,0.06)"/>
+              <circle cx="42" cy="241" r="8" fill="rgba(255,242,26,0.2)"/>
+              <text x="60" y="238" fill="#f5f5f0" font-family="'JetBrains Mono', monospace" font-size="10">Direct Snowflake Export</text>
+              <text x="60" y="254" fill="rgba(255,255,255,0.35)" font-family="Inter, sans-serif" font-size="9">Real-time schema validation</text>
+            </g>
+          </svg>`;
+        } else if (num === '05') {
+          return `<svg viewBox="0 0 800 500" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="500" fill="#171717"/>
+            <rect width="180" height="500" fill="#141414"/>
+            <rect x="24" y="28" width="90" height="20" rx="4" fill="#FFF21A"/>
+            <rect x="24" y="80" width="132" height="10" rx="2" fill="rgba(255,255,255,0.4)"/>
+            <rect x="24" y="112" width="110" height="10" rx="2" fill="rgba(255,255,255,0.2)"/>
+            <rect x="24" y="144" width="124" height="10" rx="2" fill="rgba(255,255,255,0.2)"/>
+            <line x1="180" y1="0" x2="180" y2="500" stroke="rgba(255,255,255,0.08)"/>
+            <rect x="180" y="0" width="620" height="56" fill="#191919"/>
+            <text x="210" y="34" fill="#f5f5f0" font-family="'Inter Tight', sans-serif" font-size="15" font-weight="600">Enterprise Operations Platform</text>
+            <circle cx="750" cy="28" r="14" fill="#A66BFF"/>
+            <rect x="210" y="80" width="176" height="88" rx="12" fill="#202020" stroke="rgba(255,255,255,0.06)"/>
+            <text x="228" y="108" fill="rgba(255,255,255,0.4)" font-family="Inter, sans-serif" font-size="10">Active Workflows</text>
+            <text x="228" y="142" fill="#f5f5f0" font-family="'Inter Tight', sans-serif" font-size="22" font-weight="700">14,280</text>
+            <rect x="402" y="80" width="176" height="88" rx="12" fill="#202020" stroke="rgba(255,255,255,0.06)"/>
+            <text x="420" y="108" fill="rgba(255,255,255,0.4)" font-family="Inter, sans-serif" font-size="10">System Uptime</text>
+            <text x="420" y="142" fill="#FFF21A" font-family="'Inter Tight', sans-serif" font-size="22" font-weight="700">99.98%</text>
+            <rect x="594" y="80" width="176" height="88" rx="12" fill="#202020" stroke="rgba(255,255,255,0.06)"/>
+            <text x="612" y="108" fill="rgba(255,255,255,0.4)" font-family="Inter, sans-serif" font-size="10">Data Volume / Mo</text>
+            <text x="612" y="142" fill="#A66BFF" font-family="'Inter Tight', sans-serif" font-size="22" font-weight="700">1.8 PB</text>
+            <rect x="210" y="190" width="560" height="270" rx="14" fill="#202020" stroke="rgba(255,255,255,0.06)"/>
+            <text x="236" y="226" fill="#f5f5f0" font-family="'Inter Tight', sans-serif" font-size="14" font-weight="600">Throughput Acceleration</text>
+            <path d="M 236 390 C 310 370, 380 340, 450 280 C 520 220, 600 240, 730 230" stroke="#FFF21A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M 236 410 C 310 400, 380 380, 450 350 C 520 320, 600 310, 730 290" stroke="#A66BFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>`;
+        } else {
+          return `<svg viewBox="0 0 800 500" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="500" fill="#171717"/>
+            <rect width="800" height="52" fill="#1a1a1a"/>
+            <circle cx="36" cy="26" r="10" fill="#A66BFF"/>
+            <text x="56" y="30" fill="#f5f5f0" font-family="'Inter Tight', sans-serif" font-size="14" font-weight="600">Aegis Intelligence Copilot</text>
+            <rect x="680" y="17" width="84" height="18" rx="9" fill="rgba(255,242,26,0.15)"/>
+            <text x="694" y="30" fill="#FFF21A" font-family="'JetBrains Mono', monospace" font-size="10">AUTONOMOUS</text>
+            <line x1="0" y1="52" x2="800" y2="52" stroke="rgba(255,255,255,0.08)"/>
+            <g transform="translate(360, 76)">
+              <rect width="390" height="48" rx="16" fill="#2a2a2a"/>
+              <text x="20" y="30" fill="#f5f5f0" font-family="Inter, sans-serif" font-size="12">Summarize Q3 balance sheet risks across our top 12 holdings.</text>
+            </g>
+            <g transform="translate(50, 144)">
+              <rect width="520" height="64" rx="12" fill="#141414" stroke="rgba(166,107,255,0.4)" stroke-width="1.5"/>
+              <circle cx="28" cy="32" r="8" fill="rgba(166,107,255,0.2)"/>
+              <path d="M 24 32 L 27 35 L 32 30" stroke="#A66BFF" stroke-width="1.5" stroke-linecap="round"/>
+              <text x="48" y="28" fill="#A66BFF" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600">call: query_sec_filings_vector_store()</text>
+              <text x="48" y="46" fill="rgba(255,255,255,0.4)" font-family="'JetBrains Mono', monospace" font-size="10">Retrieved 48 documents in 180ms - zero hallucination verified</text>
+            </g>
+            <g transform="translate(50, 230)">
+              <rect width="680" height="170" rx="16" fill="#222222" stroke="rgba(255,255,255,0.08)"/>
+              <circle cx="32" cy="32" r="10" fill="#FFF21A"/>
+              <text x="52" y="36" fill="#f5f5f0" font-family="'Inter Tight', sans-serif" font-size="13" font-weight="600">Synthesis Brief - 3 Critical Risk Factors Identified</text>
+              <rect x="32" y="60" width="6" height="6" rx="3" fill="#A66BFF"/>
+              <text x="48" y="66" fill="rgba(255,255,255,0.8)" font-family="Inter, sans-serif" font-size="11">Fab CapEx amortizations elevated by 18.4% YoY across manufacturers.</text>
+              <rect x="32" y="90" width="6" height="6" rx="3" fill="#A66BFF"/>
+              <text x="48" y="96" fill="rgba(255,255,255,0.8)" font-family="Inter, sans-serif" font-size="11">Short-term inventory accumulation in automotive MCU channels.</text>
+              <rect x="32" y="120" width="6" height="6" rx="3" fill="#A66BFF"/>
+              <text x="48" y="126" fill="rgba(255,255,255,0.8)" font-family="Inter, sans-serif" font-size="11">Hedging coverage ratio increased to 92% across foreign currencies.</text>
+              <rect x="32" y="142" width="150" height="18" rx="9" fill="rgba(255,242,26,0.15)"/>
+              <text x="44" y="155" fill="#FFF21A" font-family="'JetBrains Mono', monospace" font-size="9">Analyst time saved: 78 min</text>
+            </g>
+            <rect x="50" y="426" width="700" height="44" rx="22" fill="#1b1b1b" stroke="rgba(255,255,255,0.1)"/>
+            <text x="76" y="453" fill="rgba(255,255,255,0.3)" font-family="Inter, sans-serif" font-size="12">Ask Aegis follow-up or trigger execution pipeline...</text>
+            <circle cx="724" cy="448" r="14" fill="#FFF21A"/>
+            <path d="M 720 448 L 728 448 M 725 444 L 728 448 L 725 452" stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>`;
+        }
+      }
 
-        var cards = document.querySelectorAll('.service-card');
-        cards.forEach(function (card) {
-          card.addEventListener('mousemove', function (e) {
-            var rect = card.getBoundingClientRect();
-            card.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
-            card.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
-            card.style.setProperty('--glow-opacity', '1');
+      function renderAccordion() {
+        var container = document.getElementById('servicesAccordion');
+        if (!container) return;
+
+        var html = '';
+        SERVICES.forEach(function (item, i) {
+          var isOpen = i === 0;
+          var isKeyboard = item.num === '05';
+
+          html += `
+          <div class="accordion__row ${isOpen ? 'is-open' : ''}" id="service-row-${item.num}">
+            <h3 class="accordion__heading">
+              <button type="button"
+                      class="accordion__trigger"
+                      id="service-header-${item.num}"
+                      aria-expanded="${isOpen ? 'true' : 'false'}"
+                      aria-controls="service-panel-${item.num}">
+                <span class="accordion__num">${item.num}</span>
+                <span class="accordion__title">${item.title}</span>
+                <span class="accordion__icon" aria-hidden="true">
+                  <span class="accordion__icon-line accordion__icon-line--h"></span>
+                  <span class="accordion__icon-line accordion__icon-line--v"></span>
+                </span>
+              </button>
+            </h3>
+            <div class="accordion__panel"
+                 id="service-panel-${item.num}"
+                 role="region"
+                 aria-labelledby="service-header-${item.num}"
+                 aria-hidden="${isOpen ? 'false' : 'true'}">
+              <div class="accordion__panel-inner">
+                <div class="accordion__panel-content">
+                  <div class="accordion__col-left">
+                    <p class="accordion__lead">${item.lead}</p>
+                    <div class="accordion__work-box">
+                      <span class="accordion__work-label">REAL WORK</span>
+                      <p class="accordion__case-study">${item.caseStudy}</p>
+                    </div>
+                    <a href="${item.linkUrl}" class="accordion__link">
+                      <span>${item.linkText}</span>
+                      <svg class="accordion__link-arrow" width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 5h12M9 1l4 4-4 4"/>
+                      </svg>
+                    </a>
+                    <div class="accordion__tags">
+                      ${item.tags.map(function (t) { return '<span class="accordion__tag">' + t + '</span>'; }).join('')}
+                    </div>
+                  </div>
+                  <div class="accordion__col-right">
+                    <div class="accordion__preview-frame">
+                      <div class="accordion__preview-glow" aria-hidden="true"></div>
+                      <!-- REPLACE: ${item.previewImg} -->
+                      <img src="${item.previewImg}"
+                           alt="${item.title} Preview"
+                           class="accordion__preview-img ${isKeyboard ? 'accordion__preview-img--contain' : ''}"
+                           loading="lazy"
+                           onerror="this.style.display='none'; var m = this.parentNode.querySelector('.accordion__preview-mockup'); if(m) m.style.display='flex';">
+                      <div class="accordion__preview-mockup" style="${isKeyboard ? 'display:none;' : 'display:none;'}">
+                        ${getMockupSvg(item.num)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        });
+
+        container.innerHTML = html;
+      }
+
+      function initAccordion() {
+        var accordionEl = document.getElementById('servicesAccordion');
+        if (!accordionEl) return;
+
+        var triggers = Array.from(accordionEl.querySelectorAll('.accordion__trigger'));
+
+        function toggleRow(rowEl) {
+          var wasOpen = rowEl.classList.contains('is-open');
+          var rows = Array.from(accordionEl.querySelectorAll('.accordion__row'));
+
+          // Single-open accordion: close all rows
+          rows.forEach(function (r) {
+            r.classList.remove('is-open');
+            var btn = r.querySelector('.accordion__trigger');
+            var pnl = r.querySelector('.accordion__panel');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+            if (pnl) pnl.setAttribute('aria-hidden', 'true');
           });
-          card.addEventListener('mouseleave', function () {
-            card.style.setProperty('--glow-opacity', '0');
+
+          // If it wasn't open, open it
+          if (!wasOpen) {
+            rowEl.classList.add('is-open');
+            var targetBtn = rowEl.querySelector('.accordion__trigger');
+            var targetPnl = rowEl.querySelector('.accordion__panel');
+            if (targetBtn) targetBtn.setAttribute('aria-expanded', 'true');
+            if (targetPnl) targetPnl.setAttribute('aria-hidden', 'false');
+
+            // Scroll into view if off-screen (scroll-margin-top 90px)
+            setTimeout(function () {
+              var rect = rowEl.getBoundingClientRect();
+              var topOffset = 90;
+              if (rect.top < topOffset || rect.top > (window.innerHeight - 100)) {
+                var targetY = window.pageYOffset + rect.top - topOffset;
+                window.scrollTo({
+                  top: Math.max(0, targetY),
+                  behavior: reducedMotion ? 'auto' : 'smooth'
+                });
+              }
+            }, 120);
+          }
+        }
+
+        triggers.forEach(function (trigger) {
+          var row = trigger.closest('.accordion__row');
+
+          trigger.addEventListener('click', function () {
+            toggleRow(row);
+          });
+
+          trigger.addEventListener('keydown', function (e) {
+            var currentIdx = triggers.indexOf(trigger);
+
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              var next = (currentIdx + 1) % triggers.length;
+              triggers[next].focus();
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              var prev = (currentIdx - 1 + triggers.length) % triggers.length;
+              triggers[prev].focus();
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              triggers[0].focus();
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              triggers[triggers.length - 1].focus();
+            }
           });
         });
+      }
+
+      function initServicesParallax() {
+        if (reducedMotion) return;
+        var ticking = false;
+
+        function updateParallax() {
+          var openPreviews = document.querySelectorAll('.accordion__row.is-open .accordion__preview-frame img, .accordion__row.is-open .accordion__preview-frame .accordion__preview-mockup');
+          var winH = window.innerHeight;
+
+          openPreviews.forEach(function (el) {
+            var rect = el.getBoundingClientRect();
+            if (rect.bottom > 0 && rect.top < winH) {
+              var centerOffset = (rect.top + rect.height / 2) - (winH / 2);
+              var norm = centerOffset / (winH / 2);
+              var translateY = Math.max(-16, Math.min(16, norm * -16));
+              el.style.setProperty('--parallax-y', translateY.toFixed(2) + 'px');
+            }
+          });
+          ticking = false;
+        }
+
+        window.addEventListener('scroll', function () {
+          if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+          }
+        }, { passive: true });
       }
 
       /* -------------------------------------------
@@ -2635,7 +3346,9 @@
         initNav();
         initHeroParallax();
         initRevealAnimations();
-        initServiceCards();
+        renderAccordion();
+        initAccordion();
+        initServicesParallax();
         initCounters();
         initProcess();
         initTestimonials();
