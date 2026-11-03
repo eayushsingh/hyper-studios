@@ -1172,39 +1172,415 @@
     }
 
     /* ========================================
-       TECH STACK
+       SYSTEMS & ARCHITECTURE (PRODUCTION STACK)
        ======================================== */
     .stack {
       padding: var(--section-pad) 0;
       border-top: 1px solid var(--border);
+      position: relative;
+      background: radial-gradient(circle at 50% 0%, rgba(166,107,255,0.04) 0%, transparent 60%),
+                  radial-gradient(circle at 85% 60%, rgba(255,242,26,0.02) 0%, transparent 50%),
+                  var(--bg);
     }
     .stack__header {
-      margin-bottom: 56px;
-      max-width: 500px;
+      margin-bottom: 40px;
+      max-width: 820px;
     }
-    .stack__grid {
+    .stack__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .stack__pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--lemon);
+      box-shadow: 0 0 10px var(--lemon);
+      animation: pulseDot 2.4s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    .stack__eyebrow .label {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--lavender);
+    }
+    .stack__title {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4.8vw, 64px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.06;
+      color: var(--text);
+    }
+    .stack__highlight {
+      color: var(--lemon);
+      font-style: normal;
+    }
+    .stack__lead {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-dim);
+      margin-top: 18px;
+      max-width: 66ch;
+    }
+
+    /* Tabs Filter Row */
+    .stack__tabs-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 24px;
     }
-    .stack__chip {
+    .stack__tab {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 24px;
+      padding: 10px 20px;
       border-radius: var(--radius-pill);
-      border: 1px solid var(--border);
-      background: transparent;
-      font-size: 14px;
-      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
       color: var(--text-dim);
-      transition: border-color 0.3s var(--ease), color 0.3s var(--ease), background 0.3s var(--ease);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: all 0.3s var(--ease);
+      cursor: pointer;
+    }
+    .stack__tab:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .stack__tab.is-active {
+      background: var(--lemon);
+      color: #171717;
+      border-color: var(--lemon);
+      font-weight: 600;
+      box-shadow: 0 4px 18px rgba(255,242,26,0.22);
+    }
+    .stack__tab-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(23,23,23,0.15);
+      color: currentColor;
+    }
+    .stack__tab:not(.is-active) .stack__tab-badge {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-dim);
+    }
+
+    /* Bento Matrix Grid */
+    .stack__matrix {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+    }
+    .stack-card {
+      background: linear-gradient(180deg, rgba(32,32,32,0.85) 0%, rgba(22,22,22,0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 34px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease), transform 0.4s var(--ease), opacity 0.35s var(--ease);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .stack-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .stack-card:hover {
+      border-color: rgba(166,107,255,0.35);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.55), 0 0 32px rgba(166,107,255,0.06);
+      transform: translateY(-3px);
+    }
+    .stack-card.is-dimmed {
+      opacity: 0.18;
+      filter: grayscale(0.6);
+      transform: scale(0.98);
+      pointer-events: none;
+    }
+
+    /* Bento Spans */
+    .stack-card--core { grid-column: span 7; }
+    .stack-card--web  { grid-column: span 5; }
+    .stack-card--data { grid-column: span 4; }
+    .stack-card--ai   { grid-column: span 4; }
+    .stack-card--cloud{ grid-column: span 4; }
+
+    /* Card Elements */
+    .stack-card__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stack-card__num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--lavender);
+      font-weight: 500;
+    }
+    .stack-card__badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,242,26,0.08);
+      border: 1px solid rgba(255,242,26,0.25);
+      color: var(--lemon);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .stack-card__title {
+      font-family: var(--font-display);
+      font-size: clamp(21px, 2vw, 26px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .stack-card__desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-dim);
+      margin-bottom: 26px;
+    }
+
+    /* Tech Chips in Cards */
+    .stack-card__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    .tech-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 13px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #f5f5f0;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      transition: all 0.25s var(--ease);
       cursor: default;
     }
-    .stack__chip:hover {
-      border-color: rgba(166,107,255,.3);
+    .tech-chip:hover {
+      background: rgba(166,107,255,0.14);
+      border-color: rgba(166,107,255,0.4);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .tech-chip svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      fill: currentColor;
+    }
+    .tech-chip--stroke svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+    }
+    .tech-chip__sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: rgba(245,245,240,0.45);
+      margin-left: 2px;
+    }
+
+    /* Invariants List */
+    .stack-card__invariants {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .stack-card__inv-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--text-dim);
+    }
+    .stack-card__inv-icon {
+      flex-shrink: 0;
+      width: 14px;
+      height: 14px;
+      margin-top: 2px;
+      color: var(--lemon);
+    }
+
+    /* Architecture Telemetry / Verification Console */
+    .stack__telemetry {
+      margin-top: 48px;
+    }
+    .stack__terminal {
+      background: #0d0d0d;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.65), 0 0 30px rgba(255,242,26,0.03);
+    }
+    .stack__terminal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: #141414;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .stack__terminal-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .stack__term-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .stack__term-dot--red    { background: #ff5f56; }
+    .stack__term-dot--yellow { background: #ffbd2e; }
+    .stack__term-dot--green  { background: #27c93f; }
+    .stack__terminal-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.02em;
+    }
+    .stack__terminal-title svg {
+      color: var(--lavender);
+    }
+    .stack__terminal-actions {
+      display: flex;
+      gap: 6px;
+      background: rgba(255,255,255,0.04);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .stack__term-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      color: var(--text-dim);
+      background: transparent;
+      transition: all 0.2s var(--ease);
+      cursor: pointer;
+    }
+    .stack__term-btn:hover {
       color: var(--text);
-      background: rgba(166,107,255,.06);
+    }
+    .stack__term-btn.is-active {
+      background: var(--lemon);
+      color: #171717;
+      font-weight: 600;
+    }
+    .stack__terminal-body {
+      padding: 24px 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #d1d1cf;
+      overflow-x: auto;
+      min-height: 220px;
+    }
+    .term-prompt { color: var(--lemon); font-weight: 600; }
+    .term-cmd    { color: #f5f5f0; }
+    .term-flag   { color: var(--lavender); }
+    .term-pass   { color: #27c93f; font-weight: 600; }
+    .term-info   { color: #38bdf8; font-weight: 600; }
+    .term-line   { color: rgba(255,255,255,0.18); }
+    .term-sum    { color: #f5f5f0; font-weight: 500; }
+    .term-status { color: var(--lemon); font-weight: 600; }
+    .term-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--lemon);
+      vertical-align: -2px;
+      margin-left: 4px;
+      animation: termBlink 1s infinite;
+    }
+    @keyframes termBlink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .stack-card--core { grid-column: span 12; }
+      .stack-card--web  { grid-column: span 12; }
+      .stack-card--data { grid-column: span 6; }
+      .stack-card--ai   { grid-column: span 6; }
+      .stack-card--cloud{ grid-column: span 12; }
+      .stack__terminal-bar { flex-direction: column; align-items: flex-start; }
+      .stack__terminal-actions { width: 100%; overflow-x: auto; }
+    }
+    @media (max-width: 768px) {
+      .stack-card--core,
+      .stack-card--web,
+      .stack-card--data,
+      .stack-card--ai,
+      .stack-card--cloud {
+        grid-column: span 12;
+      }
+      .stack-card {
+        padding: 24px 20px;
+      }
+      .stack__tabs-row {
+        gap: 6px;
+      }
+      .stack__tab {
+        padding: 8px 14px;
+        font-size: 12px;
+      }
+      .stack__terminal-body {
+        padding: 16px 16px;
+        font-size: 11.5px;
+      }
     }
 
     /* ========================================
@@ -2019,37 +2395,345 @@
       </div>
     </section>
 
-    <!-- TECH STACK -->
-    <section class="stack" id="stack">
+        <!-- ========================================
+         SYSTEMS & ARCHITECTURE (PRODUCTION STACK)
+         ======================================== -->
+    <section class="stack" id="stack" aria-label="Systems and Architecture Matrix">
       <div class="container">
+        <!-- Section Header -->
         <div class="stack__header reveal">
-          <span class="label">Stack</span>
-          <h2>Tools we reach for.</h2>
-          <p style="margin-top:16px">We pick the right technology for the job, not the one that's trending.</p>
+          <div class="stack__eyebrow">
+            <span class="stack__pulse" aria-hidden="true"></span>
+            <span class="label">SYSTEMS &amp; ARCHITECTURE</span>
+          </div>
+          <h2 class="stack__title">Engineered for extreme scale. <em class="stack__highlight">Zero compromises.</em></h2>
+          <p class="stack__lead">We reject fragile abstractions and cargo-cult tooling. Every layer is selected for deterministic execution, strict compile-time verification, and sub-millisecond production resilience.</p>
         </div>
-        <div class="stack__grid reveal">
-          <span class="stack__chip">React</span>
-          <span class="stack__chip">Next.js</span>
-          <span class="stack__chip">Vue</span>
-          <span class="stack__chip">TypeScript</span>
-          <span class="stack__chip">Node.js</span>
-          <span class="stack__chip">Python</span>
-          <span class="stack__chip">Rust</span>
-          <span class="stack__chip">Go</span>
-          <span class="stack__chip">Swift</span>
-          <span class="stack__chip">Kotlin</span>
-          <span class="stack__chip">Flutter</span>
-          <span class="stack__chip">PostgreSQL</span>
-          <span class="stack__chip">Redis</span>
-          <span class="stack__chip">MongoDB</span>
-          <span class="stack__chip">GraphQL</span>
-          <span class="stack__chip">AWS</span>
-          <span class="stack__chip">GCP</span>
-          <span class="stack__chip">Docker</span>
-          <span class="stack__chip">Kubernetes</span>
-          <span class="stack__chip">TensorFlow</span>
-          <span class="stack__chip">PyTorch</span>
-          <span class="stack__chip">Terraform</span>
+
+        <!-- Discipline Filter Tabs -->
+        <div class="stack__tabs-row reveal" role="tablist" aria-label="Filter engineering disciplines">
+          <button class="stack__tab is-active" role="tab" aria-selected="true" data-filter="all" id="tab-all">
+            <span>All Disciplines</span>
+            <span class="stack__tab-badge">05</span>
+          </button>
+          <button class="stack__tab" role="tab" aria-selected="false" data-filter="core" id="tab-core">
+            <span>Core Systems &amp; Trading</span>
+          </button>
+          <button class="stack__tab" role="tab" aria-selected="false" data-filter="web" id="tab-web">
+            <span>Web Platforms &amp; Mobile</span>
+          </button>
+          <button class="stack__tab" role="tab" aria-selected="false" data-filter="data" id="tab-data">
+            <span>Data Engines &amp; Streams</span>
+          </button>
+          <button class="stack__tab" role="tab" aria-selected="false" data-filter="ai" id="tab-ai">
+            <span>Applied AI &amp; Agents</span>
+          </button>
+          <button class="stack__tab" role="tab" aria-selected="false" data-filter="cloud" id="tab-cloud">
+            <span>Cloud &amp; Sovereign Infra</span>
+          </button>
+        </div>
+
+        <!-- Bento Architecture Matrix -->
+        <div class="stack__matrix" id="stackMatrix">
+          <!-- CARD 01: Core Systems -->
+          <article class="stack-card stack-card--core reveal" data-domain="core" aria-label="Core Systems and Algorithmic Engines">
+            <div>
+              <div class="stack-card__top">
+                <span class="stack-card__num">01 / High-Throughput Runtimes</span>
+                <span class="stack-card__badge">&lt; 12&mu;s P99 Execution</span>
+              </div>
+              <h3 class="stack-card__title">Core Systems &amp; Algorithmic Engines</h3>
+              <p class="stack-card__desc">Zero-allocation event loops, SIMD-accelerated data pipelines, and memory-safe concurrent runtimes built for high-frequency trading systems, quantitative models, and low-latency order routing.</p>
+              
+              <div class="stack-card__chips">
+                <div class="tech-chip" title="Rust — Memory safe without runtime GC">
+                  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-4 19.16V18a2 2 0 0 1-2-2v-1.13A10 10 0 0 0 12 22a10 10 0 0 0 6-1.97V16a2 2 0 0 1-2 2v3.16A10 10 0 0 0 12 2zm-1 5h2a3 3 0 0 1 3 3c0 1.3-.8 2.4-2 2.8l2.2 3.2h-2.4l-1.8-2.8H11v2.8H9V7h2zm0 4.2h1.8a1.2 1.2 0 1 0 0-2.4H11v2.4z"/></svg>
+                  <span>Rust</span>
+                  <span class="tech-chip__sub">Zero-Alloc</span>
+                </div>
+                <div class="tech-chip" title="Go — High-concurrency distributed backbones">
+                  <svg viewBox="0 0 24 24"><path d="M1.5 12c0-4.4 3.6-8 8-8 2.5 0 4.7 1.1 6.2 3l-2.4 2.1C12.3 7.8 10.7 7 9.5 7 6.7 7 4.5 9.2 4.5 12s2.2 5 5 5c1.8 0 3.3-1 4.1-2.4H9.5v-3h7.2c.2.8.3 1.6.3 2.4 0 4.4-3.6 8-8 8-4.4 0-8-3.6-8-8zm19.5-2h-3v-2h3v-3h2v3h3v2h-3v3h-2v-3z"/></svg>
+                  <span>Go</span>
+                  <span class="tech-chip__sub">gRPC / Microservices</span>
+                </div>
+                <div class="tech-chip" title="C++20 — Ultra-low latency execution">
+                  <svg viewBox="0 0 24 24"><path d="M12 2L3 7.2v9.6L12 22l9-5.2V7.2L12 2zm-1.8 13.5a4 4 0 1 1 0-7 4 4 0 0 1 0 7zm5.8-3.5h-1.5v1.5h-1V12h-1.5v-1h1.5V9.5h1V11H16v1zm4 0h-1.5v1.5h-1V12H16v-1h1.5V9.5h1V11H20v1z"/></svg>
+                  <span>C++20</span>
+                  <span class="tech-chip__sub">Sub-&mu;s Matcher</span>
+                </div>
+                <div class="tech-chip" title="WebAssembly — High-speed client sandbox">
+                  <svg viewBox="0 0 24 24"><path d="M12 2L2 7.8v8.4L12 22l10-5.8V7.8L12 2zm-5 13l-1.4-6h1.5l.8 4 1-4h1.4l1 4 .8-4h1.5L12 15h-1.4l-1-4-1 4H7zm11-1.3c-.3.8-.9 1.4-1.8 1.4-1.3 0-2-.9-2-2.3 0-1.5.8-2.4 2-2.4.9 0 1.5.6 1.8 1.4h-1.3c-.1-.3-.3-.5-.6-.5-.5 0-.7.4-.7 1.5 0 1 .2 1.4.7 1.4.3 0 .5-.2.6-.5h1.3z"/></svg>
+                  <span>Wasm</span>
+                  <span class="tech-chip__sub">Near-Native Edge</span>
+                </div>
+                <div class="tech-chip" title="Zig — Precision memory and allocator control">
+                  <svg viewBox="0 0 24 24"><path d="M4 5h16l-7 7h7v3H4l7-7H4V5z"/></svg>
+                  <span>Zig</span>
+                  <span class="tech-chip__sub">Bare-Metal IO</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="stack-card__invariants">
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Zero garbage-collection pauses with predictable sub-microsecond jitter</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Strict compile-time thread safety &amp; memory invariants (zero data races)</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Kernel-bypass socket IO &amp; tailored FIX / binary WebSocket feeds</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 02: Web & Native UI -->
+          <article class="stack-card stack-card--web reveal" data-domain="web" aria-label="Web Platforms and Native Mobile">
+            <div>
+              <div class="stack-card__top">
+                <span class="stack-card__num">02 / Fluid Interfaces</span>
+                <span class="stack-card__badge">120fps &amp; Sub-100ms FCP</span>
+              </div>
+              <h3 class="stack-card__title">Modern Web &amp; Native Mobile</h3>
+              <p class="stack-card__desc">Type-safe isomorphic React architectures with edge SSR streaming, hardware-accelerated animations, and first-party native runtimes across iOS, iPadOS, and Android.</p>
+              
+              <div class="stack-card__chips">
+                <div class="tech-chip" title="Next.js 15 & React 19 — Edge SSR & Server Components">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm3.8 14.8l-5.6-7.2v7.2H8.5V7.5h1.8l5.5 7.1V7.5h1.7v9.3h-1.7z"/></svg>
+                  <span>Next.js 15</span>
+                  <span class="tech-chip__sub">React 19</span>
+                </div>
+                <div class="tech-chip" title="TypeScript 5 — Strict static typing">
+                  <svg viewBox="0 0 24 24"><path d="M3 4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4zm8 7V9H6v2h1.5v6H9.5v-6H11zm3.8 6c2 0 3.2-1 3.2-2.5 0-1.7-1.4-2.2-2.6-2.6-.8-.3-1.4-.5-1.4-1 0-.4.3-.7 1-.7.7 0 1.2.3 1.5.8l1.3-.9c-.6-.9-1.5-1.3-2.8-1.3-1.8 0-3 1-3 2.4 0 1.5 1.2 2.1 2.4 2.5.9.3 1.6.6 1.6 1.1 0 .5-.4.8-1.1.8-.9 0-1.6-.4-1.9-1l-1.4.9c.6 1.1 1.7 1.6 3.2 1.6z"/></svg>
+                  <span>TypeScript 5</span>
+                  <span class="tech-chip__sub">100% Strict</span>
+                </div>
+                <div class="tech-chip" title="Swift & SwiftUI — Apple native performance">
+                  <svg viewBox="0 0 24 24"><path d="M20.8 17.5c-2.3 2.9-6 4.7-9.8 4.5 5.8-2.6 7.6-7.5 7.6-7.5-3.3 2.8-7.7 3.6-11.4 2.1 5.3-2.4 7.6-6.6 7.6-6.6-4 2.5-8.5 2.4-11.8 0 5-2.8 7.5-7.3 7.5-7.3C6.3 5.4 3 9.4 3 14c0 4.8 3.8 8.7 8.6 8.9 4.3.2 8.3-1.8 10.7-5.4h-1.5z"/></svg>
+                  <span>SwiftUI</span>
+                  <span class="tech-chip__sub">iOS / macOS</span>
+                </div>
+                <div class="tech-chip" title="Kotlin Compose — Modern native Android">
+                  <svg viewBox="0 0 24 24"><path d="M3 3h18L12 12l9 9H3V3zm0 9l8-8H3v8z"/></svg>
+                  <span>Kotlin</span>
+                  <span class="tech-chip__sub">Jetpack Compose</span>
+                </div>
+                <div class="tech-chip" title="Three.js & WebGPU — 3D Canvas rendering">
+                  <svg viewBox="0 0 24 24"><path d="M12 2L2 19.5h20L12 2zm0 4.4l6.5 11.1H5.5L12 6.4z"/></svg>
+                  <span>WebGPU / 3D</span>
+                  <span class="tech-chip__sub">Three.js</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="stack-card__invariants">
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Strict end-to-end schema validation from database to React props</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Zero Cumulative Layout Shift (CLS &lt; 0.01) and sub-100ms FCP</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Smooth 120Hz ProMotion gesture drivers with native haptic bindings</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 03: Data & Distributed Storage -->
+          <article class="stack-card stack-card--data reveal" data-domain="data" aria-label="Distributed Data and Stream Engines">
+            <div>
+              <div class="stack-card__top">
+                <span class="stack-card__num">03 / Persistence &amp; OLAP</span>
+                <span class="stack-card__badge">10M+ Events/s &amp; ACID</span>
+              </div>
+              <h3 class="stack-card__title">Distributed Data &amp; Streams</h3>
+              <p class="stack-card__desc">Hybrid transactional and analytical storage backbones capable of processing millions of streaming financial events with instant analytical recall.</p>
+              
+              <div class="stack-card__chips">
+                <div class="tech-chip" title="PostgreSQL 16 — Relational ACID foundation">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C7 2 3 5.5 3 9.8c0 3.1 2.1 5.8 5.2 6.8v3.4c0 .6.4 1 1 1h5.6c.6 0 1-.4 1-1v-3.4c3.1-1 5.2-3.7 5.2-6.8C21 5.5 17 2 12 2zm-1 14.5v-2.3h2v2.3h-2zm4-4.8c-.8.5-1.8.8-3 .8s-2.2-.3-3-.8c-.7-.5-1.2-1.2-1.5-2.1C8 8.8 8.8 8 9.8 8c.7 0 1.3.4 1.7.9l.5.6.5-.6c.4-.5 1-.9 1.7-.9 1 0 1.8.8 2.3 1.6-.3.9-.8 1.6-1.5 2.1z"/></svg>
+                  <span>PostgreSQL 16</span>
+                  <span class="tech-chip__sub">ACID Core</span>
+                </div>
+                <div class="tech-chip" title="Redis Cluster — In-memory caching & pub/sub">
+                  <svg viewBox="0 0 24 24"><path d="M12 2L2 7.5l10 5.5 10-5.5L12 2zm0 8.5L4.5 6.5 12 2.5l7.5 4L12 10.5zm10 2L12 18 2 12.5v3L12 21l10-5.5v-3z"/></svg>
+                  <span>Redis Cluster</span>
+                  <span class="tech-chip__sub">Sub-ms Cache</span>
+                </div>
+                <div class="tech-chip" title="ClickHouse — Vectorized columnar OLAP">
+                  <svg viewBox="0 0 24 24"><path d="M3 4h2.5v16H3V4zm4 3h2.5v10H7V7zm4-4h2.5v18H11V3zm4 5h2.5v8H15V8zm4-2h2.5v12H19V6z"/></svg>
+                  <span>ClickHouse</span>
+                  <span class="tech-chip__sub">Columnar OLAP</span>
+                </div>
+                <div class="tech-chip" title="Apache Kafka — High-throughput event streaming">
+                  <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-3.8 2.7L5.5 3.3a1.5 1.5 0 0 0-2 2l1.4 2.7A4 4 0 0 0 4 12a4 4 0 0 0 .9 2.5l-1.4 2.7a1.5 1.5 0 0 0 2 2l2.7-1.4A4 4 0 1 0 12 2zm0 6a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-4.7 7.7a2 2 0 1 1-2.8-2.8 2 2 0 0 1 2.8 2.8zm0-9.4a2 2 0 1 1 2.8 2.8 2 2 0 0 1-2.8-2.8z"/></svg>
+                  <span>Apache Kafka</span>
+                  <span class="tech-chip__sub">Event Stream</span>
+                </div>
+                <div class="tech-chip" title="pgvector — Vector similarity search">
+                  <svg viewBox="0 0 24 24"><path d="M3 21h18v-2H5V3H3v18zm15.5-14a2.5 2.5 0 1 0-3.5-3.5l-6 6a2.5 2.5 0 0 0 0 3.5l3.5 3.5a2.5 2.5 0 0 0 3.5 0l6-6a2.5 2.5 0 0 0-3.5-3.5zm-5 6.5l-2-2 5-5 2 2-5 5z"/></svg>
+                  <span>pgvector</span>
+                  <span class="tech-chip__sub">Embeddings</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="stack-card__invariants">
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Sub-millisecond key-value retrieval and pub/sub propagation</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Immutable event-sourcing with 100% deterministic replayability</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Automated continuous point-in-time recovery (PITR)</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 04: Applied AI & Machine Intelligence -->
+          <article class="stack-card stack-card--ai reveal" data-domain="ai" aria-label="Applied AI and Agent Architectures">
+            <div>
+              <div class="stack-card__top">
+                <span class="stack-card__num">04 / Machine Intelligence</span>
+                <span class="stack-card__badge">TTFT &lt; 160ms &amp; Deterministic</span>
+              </div>
+              <h3 class="stack-card__title">Applied AI &amp; Agent Systems</h3>
+              <p class="stack-card__desc">Stateful deterministic agent loops, fine-tuned domain models, vector retrieval backbones, and rigorous automated validation guardrails.</p>
+              
+              <div class="stack-card__chips">
+                <div class="tech-chip" title="Python 3.12 — Scientific runtime and AI orchestration">
+                  <svg viewBox="0 0 24 24"><path d="M11.9 2c-3.4 0-5.4 1.5-5.4 4.3v2.2h5.5v.8H4.6C2.5 9.3 1 11.2 1 14.1s1.8 4.7 4.2 4.7h2.2v-2.3c0-2.4 2-4.3 4.4-4.3h5.4v-.8h-5.4c-1.4 0-2.6-.8-2.6-2.2V6.3c0-1.7 1.5-2.7 3.7-2.7h4.8c1.7 0 3.1 1.4 3.1 3.1v1.6H23V6.3C23 3.5 20.7 2 17.5 2h-5.6zM9.5 4.5a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8zm2.6 17.5c3.4 0 5.4-1.5 5.4-4.3v-2.2h-5.5v-.8h7.4c2.1 0 3.6-1.9 3.6-4.8s-1.8-4.7-4.2-4.7h-2.2v2.3c0 2.4-2 4.3-4.4 4.3H6.8v.8h5.4c1.4 0 2.6.8 2.6 2.2v2.9c0 1.7-1.5 2.7-3.7 2.7H6.3C4.6 20.7 3.2 19.3 3.2 17.6V16H1v2.2C1 21 3.3 22.5 6.5 22.5h5.6zm2.4-2.5a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8z"/></svg>
+                  <span>Python 3.12</span>
+                  <span class="tech-chip__sub">Scientific</span>
+                </div>
+                <div class="tech-chip" title="PyTorch — Model fine-tuning and weight optimization">
+                  <svg viewBox="0 0 24 24"><path d="M12.5 2a8.5 8.5 0 0 0-6 14.5l-1.5 1.5 1.4 1.4 1.5-1.5A8.5 8.5 0 0 0 18.5 7.5L16 10l-1.4-1.4 2.5-2.5A8.4 8.4 0 0 0 12.5 2zm4 6.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                  <span>PyTorch</span>
+                  <span class="tech-chip__sub">Fine-Tuning</span>
+                </div>
+                <div class="tech-chip" title="vLLM & TensorRT-LLM — Low latency GPU inference">
+                  <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h8v8H8V8zm2 2v4h4v-4h-4zM2 7h2v2H2V7zm0 4h2v2H2v-2zm0 4h2v2H2v-2zm20-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zM7 2h2v2H7V2zm4 0h2v2h-2V2zm4 0h2v2h-2V2zM7 20h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z"/></svg>
+                  <span>vLLM / TensorRT</span>
+                  <span class="tech-chip__sub">GPU Serving</span>
+                </div>
+                <div class="tech-chip" title="LangGraph & MCP — Stateful agent graphs">
+                  <svg viewBox="0 0 24 24"><path d="M6 3a3 3 0 1 0 2.8 4h6.4a3 3 0 1 0 2.8-4 3 3 0 0 0-2.8 4H8.8A3 3 0 0 0 6 3zm0 12a3 3 0 1 0 2.8 4h6.4a3 3 0 1 0 2.8-4 3 3 0 0 0-2.8 4H8.8A3 3 0 0 0 6 15zM7.5 7.8L10 13h1.8l-2.5-5.2H7.5zm8 0l-2.5 5.2h1.8l2.5-5.2h-1.8z"/></svg>
+                  <span>LangGraph &amp; MCP</span>
+                  <span class="tech-chip__sub">Deterministic</span>
+                </div>
+                <div class="tech-chip" title="Ollama & Local LLMs — Air-gapped model execution">
+                  <svg viewBox="0 0 24 24"><path d="M12 2L3 6v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V6l-9-4zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4 11.5c-1.2-1-2.5-1.5-4-1.5s-2.8.5-4 1.5c-1-.9-1.8-2.1-2-3.5 1.5-.7 3.5-1.2 6-1.2s4.5.5 6 1.2c-.2 1.4-1 2.6-2 3.5z"/></svg>
+                  <span>Ollama / Local</span>
+                  <span class="tech-chip__sub">Air-Gapped</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="stack-card__invariants">
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Syntactic &amp; semantic schema validation (zero hallucinated output)</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Deterministic human-in-the-loop gates for financial operations</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Sovereign on-premises and private cloud GPU deployment</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 05: Sovereign Cloud & Platform Infra -->
+          <article class="stack-card stack-card--cloud reveal" data-domain="cloud" aria-label="Cloud and Sovereign Infrastructure">
+            <div>
+              <div class="stack-card__top">
+                <span class="stack-card__num">05 / Platform &amp; Resilience</span>
+                <span class="stack-card__badge">99.999% SLA &amp; SOC-2 Ready</span>
+              </div>
+              <h3 class="stack-card__title">Cloud &amp; Platform Infrastructure</h3>
+              <p class="stack-card__desc">Multi-region declarative infrastructure with automated blue-green pipelines, immutable container runtimes, and global edge request termination.</p>
+              
+              <div class="stack-card__chips">
+                <div class="tech-chip" title="Docker — Reproducible container standards">
+                  <svg viewBox="0 0 24 24"><path d="M13 5h2v2h-2V5zm-3 0h2v2h-2V5zm-3 3h2v2H7V8zm3 0h2v2h-2V8zm3 0h2v2h-2V8zm3 0h2v2h-2V8zm-9 3h2v2H4v-2zm3 0h2v2H7v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2zm5.7 1.8c-.3-.2-.9-.3-1.6-.2-.3-.5-.7-.9-1.3-1.2l-.5-.3-.3.4c-.4.5-.6 1.2-.5 1.9-1 .6-2.5.6-3.6.6H2.1c-.5 1.8-.2 3.8.8 5.4C4.2 19 6 20 8.2 20c6.6 0 11.8-4.2 12.7-10.2.7 0 1.4-.2 1.9-.6l.4-.3-.5-.3z"/></svg>
+                  <span>Docker</span>
+                  <span class="tech-chip__sub">Hermetic Builds</span>
+                </div>
+                <div class="tech-chip" title="Kubernetes — Self-healing container orchestration">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l8.7 5v10L12 22l-8.7-5V7L12 2zm0 2.3L5.3 8.2v7.6L12 19.7l6.7-3.9V8.2L12 4.3zm0 3.2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg>
+                  <span>Kubernetes</span>
+                  <span class="tech-chip__sub">EKS / GKE</span>
+                </div>
+                <div class="tech-chip" title="Terraform & OpenTofu — Declarative infrastructure as code">
+                  <svg viewBox="0 0 24 24"><path d="M8.5 2L14 5.2v6.3L8.5 8.3V2zm0 7.3L14 12.5v6.3l-5.5-3.2V9.3zM2.5 5.5L8 8.7v6.3L2.5 11.8V5.5zm12 0L20 8.7v6.3l-5.5-3.2V5.5z"/></svg>
+                  <span>Terraform</span>
+                  <span class="tech-chip__sub">OpenTofu IaC</span>
+                </div>
+                <div class="tech-chip" title="AWS & GCP — Multi-region enterprise cloud">
+                  <svg viewBox="0 0 24 24"><path d="M6.8 14.5c-1.8 0-3.3-1-3.3-2.8 0-2.2 1.9-3.1 4.5-3.1.8 0 1.5.1 2 .2v-.5c0-1.1-.7-1.8-2.2-1.8-.9 0-1.8.3-2.4.7l-.6-1.1c.8-.5 2-1 3.4-1 2.4 0 3.8 1.2 3.8 3.5v5.5h-1.8v-1.1c-.6.7-1.7 1.3-3.4 1.3v-.9zm.5-1.5c1.4 0 2.4-.9 2.4-2.1v-.6c-.5-.1-1.1-.2-1.7-.2-1.7 0-2.6.5-2.6 1.7 0 .8.6 1.2 1.9 1.2zm14.4 3.7c-3.8 2.2-8.5 3.3-13.2 3.3-2.6 0-5.1-.4-7.5-1.1l-.3 1.2c2.5.7 5.2 1.1 7.8 1.1 5.2 0 10.3-1.3 14.5-3.7l-1.3-.8zm-3.6-5.8h1.8l1.4 5.4 1.6-5.4h1.7l-2.4 7.2h-1.7l-1.4-5.2-1.4 5.2h-1.7l-2.4-7.2h1.8l1.6 5.4 1.4-5.4z"/></svg>
+                  <span>AWS &amp; GCP</span>
+                  <span class="tech-chip__sub">Multi-Region</span>
+                </div>
+                <div class="tech-chip" title="Cloudflare Workers — Global edge execution">
+                  <svg viewBox="0 0 24 24"><path d="M18.8 11.2c-.3-2.3-2.2-4.1-4.6-4.2-1.8-.1-3.4.9-4.2 2.3-.5-.2-1-.3-1.5-.3-2.2 0-4 1.8-4 4 0 .3 0 .7.1 1H2v.5C2 17.5 4.5 20 7.5 20h11.8c2.6 0 4.7-2.1 4.7-4.7 0-2.4-1.8-4.4-4.2-4.6l-1-.5zm.5 7.3H7.5c-1.9 0-3.5-1.6-3.5-3.5 0-.3.1-.7.2-1 .4-1.2 1.5-2 2.8-2 .4 0 .8.1 1.2.3l.8.4.3-.8c.6-1.5 2-2.4 3.6-2.4 2 0 3.7 1.6 3.8 3.6v.9h.9c1.5 0 2.7 1.2 2.7 2.7 0 1-.5 1.8-1.5 1.8z"/></svg>
+                  <span>Cloudflare</span>
+                  <span class="tech-chip__sub">300+ PoPs Edge</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="stack-card__invariants">
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Multi-region active-active redundancy with automated DNS failover</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Cryptographically signed build digests and zero-trust mTLS mesh</span>
+              </div>
+              <div class="stack-card__inv-item">
+                <svg class="stack-card__inv-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 11 8 15 16 6"/></svg>
+                <span>Continuous SOC-2 Type II posture with automated vulnerability triage</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Live Architecture Telemetry / Verification Console -->
+        <div class="stack__telemetry reveal" aria-label="Live System Verification Console">
+          <div class="stack__terminal">
+            <div class="stack__terminal-bar">
+              <div class="stack__terminal-controls" aria-hidden="true">
+                <span class="stack__term-dot stack__term-dot--red"></span>
+                <span class="stack__term-dot stack__term-dot--yellow"></span>
+                <span class="stack__term-dot stack__term-dot--green"></span>
+              </div>
+              <div class="stack__terminal-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                <span>HYPER_SYSTEM_SPECS.sh &mdash; Live Verification Console</span>
+              </div>
+              <div class="stack__terminal-actions" role="tablist" aria-label="Terminal telemetry views">
+                <button class="stack__term-btn is-active" role="tab" aria-selected="true" data-view="latency">Latency &amp; Throughput</button>
+                <button class="stack__term-btn" role="tab" aria-selected="false" data-view="reliability">Reliability &amp; SLA</button>
+                <button class="stack__term-btn" role="tab" aria-selected="false" data-view="security">Security &amp; Types</button>
+              </div>
+            </div>
+            <div class="stack__terminal-body" id="stackTerminalBody" tabindex="0" role="region" aria-label="Terminal telemetry screen">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -3312,6 +3996,97 @@
       /* -------------------------------------------
          MAGNETIC BUTTONS (desktop only)
          ------------------------------------------- */
+            /* -------------------------------------------
+         SYSTEMS & ARCHITECTURE MATRIX & CONSOLE
+         ------------------------------------------- */
+      function initStackMatrix() {
+        // Tab filtering
+        var tabs = document.querySelectorAll('.stack__tab');
+        var cards = document.querySelectorAll('.stack-card');
+        
+        tabs.forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var filter = tab.getAttribute('data-filter');
+            
+            tabs.forEach(function (t) {
+              t.classList.remove('is-active');
+              t.setAttribute('aria-selected', 'false');
+            });
+            tab.classList.add('is-active');
+            tab.setAttribute('aria-selected', 'true');
+
+            cards.forEach(function (card) {
+              var domain = card.getAttribute('data-domain');
+              if (filter === 'all' || domain === filter) {
+                card.classList.remove('is-dimmed');
+              } else {
+                card.classList.add('is-dimmed');
+              }
+            });
+          });
+        });
+
+        // Terminal views
+        var termBtns = document.querySelectorAll('.stack__term-btn');
+        var termBody = document.getElementById('stackTerminalBody');
+        if (!termBody) return;
+
+        var termData = {
+          latency: [
+            '<span class="term-prompt">$</span> <span class="term-cmd">hyper-bench</span> <span class="term-flag">--p99 --global-anycast --verbose</span>',
+            '<span class="term-pass">[PASS]</span> Global Anycast Edge Routing (300+ PoPs) .......... <span class="term-sum">14.2ms avg</span>',
+            '<span class="term-pass">[PASS]</span> TLS 1.3 0-RTT Handshake Termination .............. <span class="term-sum">8.6ms</span>',
+            '<span class="term-pass">[PASS]</span> Redis In-Memory Cache Lookup (P99) ............... <span class="term-sum">0.38ms</span>',
+            '<span class="term-pass">[PASS]</span> Rust Core Matching Engine Jitter ................. <span class="term-sum">6.2&mu;s</span>',
+            '<span class="term-pass">[PASS]</span> Edge SSR First Contentful Paint (FCP) ............ <span class="term-sum">72ms</span>',
+            '<span class="term-line">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</span>',
+            '<span class="term-sum">METRIC SUMMARY: P99 End-to-End &lt; 28ms | Throughput: 140,000 req/sec</span>',
+            '<span class="term-status">STATUS: OPTIMAL [Zero Hot-Paths Detected]</span><span class="term-cursor"></span>'
+          ].join('<br>'),
+          reliability: [
+            '<span class="term-prompt">$</span> <span class="term-cmd">hyper-audit</span> <span class="term-flag">--topology --ha --fault-injection</span>',
+            '<span class="term-info">[INFO]</span> Active Regions ................................ us-east-1, eu-central-1, ap-northeast-1',
+            '<span class="term-pass">[PASS]</span> Chaos Monkey: Random Pod Termination ............ Recovered in 180ms (zero dropped reqs)',
+            '<span class="term-pass">[PASS]</span> Distributed Raft Consensus &amp; Split-Brain ........ Zero drift detected',
+            '<span class="term-pass">[PASS]</span> Recovery Point Objective (RPO) .................. <span class="term-sum">0.00s</span> (synchronous WAL replication)',
+            '<span class="term-pass">[PASS]</span> Recovery Time Objective (RTO) ................... <span class="term-sum">&lt; 3.8s</span> automated DNS failover',
+            '<span class="term-line">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</span>',
+            '<span class="term-sum">METRIC SUMMARY: 99.999% Availability Commitment | Zero Single Point of Failure</span>',
+            '<span class="term-status">STATUS: CERTIFIED ENTERPRISE RESILIENCE</span><span class="term-cursor"></span>'
+          ].join('<br>'),
+          security: [
+            '<span class="term-prompt">$</span> <span class="term-cmd">hyper-verify</span> <span class="term-flag">--types --sbom --compliance=strict</span>',
+            '<span class="term-pass">[PASS]</span> TypeScript Strictness &amp; Null Checks ............ <span class="term-sum">100% (0 errors, 0 any)</span>',
+            '<span class="term-pass">[PASS]</span> Rust Borrow Checker &amp; Memory Safety Audit ....... <span class="term-sum">0 unsafe blocks</span>',
+            '<span class="term-pass">[PASS]</span> Software Bill of Materials (SBOM) ............... <span class="term-sum">0 Critical / 0 High CVEs</span>',
+            '<span class="term-pass">[PASS]</span> Supply Chain Cosign Digest Verification ........ <span class="term-sum">SHA-256 Validated</span>',
+            '<span class="term-pass">[PASS]</span> Encryption Standards at Rest &amp; In Transit ...... <span class="term-sum">AES-256-GCM / TLS 1.3</span>',
+            '<span class="term-line">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</span>',
+            '<span class="term-sum">METRIC SUMMARY: SOC-2 Type II Audit-Ready | Continuous Cryptographic Attestation</span>',
+            '<span class="term-status">STATUS: VERIFIED &amp; COMPLIANT</span><span class="term-cursor"></span>'
+          ].join('<br>')
+        };
+
+        function renderTerm(view) {
+          termBody.innerHTML = termData[view] || termData.latency;
+        }
+
+        renderTerm('latency');
+
+        termBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var view = btn.getAttribute('data-view');
+            termBtns.forEach(function (b) {
+              b.classList.remove('is-active');
+              b.setAttribute('aria-selected', 'false');
+            });
+            btn.classList.add('is-active');
+            btn.setAttribute('aria-selected', 'true');
+            renderTerm(view);
+          });
+        });
+      }
+
       function initMagneticButtons() {
         if (!supportsHover || reducedMotion) return;
 
@@ -3355,6 +4130,7 @@
         initFAQ();
         initContactForm();
         initMagneticButtons();
+        initStackMatrix();
         initFooterYear();
       });
     })();
